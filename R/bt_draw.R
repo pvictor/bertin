@@ -19,9 +19,10 @@ bt_draw <- function(bertin, width = NULL, height = NULL, elementId = NULL) {
       names(bertin$layers[[i]]) <- new_names
     }
   }
-  x <- list(
-    parameters = bertin
-  )
+  x <- drop_nulls(list(
+    parameters = bertin,
+    hide_layers = attr(bertin, "hide_layers")
+  ))
   attr(x, "TOJSON_ARGS") <- list(dataframe = "rows", auto_unbox = TRUE, pretty = FALSE, sf = "geojson")
 
   htmlwidgets::createWidget(

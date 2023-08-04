@@ -14,9 +14,21 @@ HTMLWidgets.widget({
         if (!x.parameters.params.hasOwnProperty("width")) {
           x.parameters.params.width = width;
         }
+        console.log(x);
         map = bertin.draw(x.parameters);
         el.appendChild(map);
-        //el.style.width = "100%";
+
+        // Hide layers
+        if (x.hasOwnProperty("hide_layers")) {
+          x.hide_layers.forEach((d) => {
+            map.update({
+              id: d,
+              attr: "visibility",
+              value: false,
+              duration: 0
+            });
+          });
+        }
       },
       getMap: function() {
         return map;

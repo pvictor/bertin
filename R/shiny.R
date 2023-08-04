@@ -92,21 +92,51 @@ bt_proxy_update <- function(proxy,
                             legend = NULL) {
   if (!"bertinProxy" %in% class(proxy))
     stop("This function must be used with a bertinProxy object")
-  params <- list(
-    id = id,
-    attr = attr,
-    value = value,
-    delay = delay,
-    duration = duration,
-    legend = legend
-  )
-  params <- params[!vapply(params, is.null, FUN.VALUE = logical(1))]
   proxy$session$sendCustomMessage(
     type = "bertin-update",
     message = list(
       id = proxy$id,
-      data = params
+      data = drop_nulls(list(
+        id = id,
+        attr = attr,
+        value = value,
+        delay = delay,
+        duration = duration,
+        legend = legend
+      ))
     )
   )
   proxy
+}
+
+
+
+bt_hide_layer <- function(proxy, layers_id, delay = 0, duration = 100) {
+  if (inherits(proxy, "bertinProxy")) {
+    lapply(
+      X = layers_id,
+      FUN = bt_proxy_update,
+      proxy = proxy,
+      attr = "visibility",
+      value = FALSE
+    )
+  } else {
+    attr(proxy, "hide_layers") <- list1(layers_id)
+  }
+  return(proxy)
+}
+
+bt_show_layer <- function(proxy, layers_id, delay = 100, duration = 100) {
+  if (inherits(proxy, "bertinProxy")) {
+    lapply(
+      X = layers_id,
+      FUN = bt_proxy_update,
+      proxy = proxy,
+      attr = "visibility",
+      value = TRUE
+    )
+  } else {
+    attr(proxy, "show_layers") <- list1(layers_id)
+  }
+  return(proxy)
 }

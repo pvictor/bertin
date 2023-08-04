@@ -28,7 +28,8 @@ bt_bubble(
   leg_round,
   leg_divisor = 1,
   leg_fontSize = 14,
-  leg_fontSize2 = 10
+  leg_fontSize2 = 10,
+  id = NULL
 )
 }
 \arguments{
